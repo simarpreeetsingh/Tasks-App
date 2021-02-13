@@ -18,4 +18,7 @@ const mongoose = require("mongoose");
 const dbName = "task-app";
 const url = process.env.PORT || `mongodb://127.0.0.1:27017/${dbName}`;
 
-mongoose.connect(url)
+mongoose.connect(url, {useNewUrlParser: true, useUnifiedTopology: true})
+.then(doc => {
+  // console.log(doc)
+})
