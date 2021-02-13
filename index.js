@@ -1,11 +1,24 @@
-MongoClient = require("mongodb").MongoClient;
-express = require("express");
+// const MongoClient = require("mongodb").MongoClient
 
-url = process.env.PORT || "mongodb://localhost:27017"
+// const url = process.env.PORT || "mongodb://127.0.0.1:27017"
+// const dbName = "Tasks"
 
-MongoClient.connect(url, function (err, client) {
-  if (err)
-    throw new Error(err);
+// MongoClient.connect(url, function(err, client) {
+//   if (err)
+//     throw new Error(err)
   
-  console.log(client)
+//   collection = client.db(dbName).collection("Practise")
+//   collection.insert({
+//     name: "Coder Singh"
+//   })
+// })
+
+const mongoose = require("mongoose");
+
+const dbName = "task-app";
+const url = process.env.PORT || `mongodb://127.0.0.1:27017/${dbName}`;
+
+mongoose.connect(url, {useNewUrlParser: true, useUnifiedTopology: true})
+.then(doc => {
+  // console.log(doc)
 })
