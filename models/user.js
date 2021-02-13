@@ -12,8 +12,15 @@ const schema = new mongoose.Schema({
   age: {
     type: Number,
     required: true
+  },
+  phone_number: {
+    type: String
+    // min_length: 10
   }
 });
+
+// console.log(mongoose.connection, "*******************")
+
 const User = mongoose.model("User", schema);
 
 module.exports = User;
