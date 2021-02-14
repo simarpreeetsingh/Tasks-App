@@ -1,35 +1,62 @@
 const User = require("../models/user");
 
 const index = function (req, res) {
-  console.log(req.query, req.params);
-  res.end("Ok Done index");
+  User.find({})
+  .then(doc => {
+    res.status(200).send(JSON.stringify({
+      success: true,
+      data: doc,
+      total: doc.length
+    }))
+  })
+  .catch(err => {
+    res.status(500).send(JSON.stringify(err))
+  })
 }
 
 const show = function (req, res) {
-  console.log(req.query, req.params, res);
-  res.end("Ok Done show");
+  User.findOne({ _id: `${req.params.id}` })
+  .then(doc => {
+    res.status(200).send(JSON.stringify({
+      success: true,
+      data: doc
+    }))
+  })
+  .catch(err => {
+    res.status(500).send(JSON.stringify(err))
+  })
 }
 
 const create = function (req, res) {
-  console.log(req.query, req.params, req.body);
   user = new User(req.body);
   user.save(function (err) {
-    if (err)
-      console.log(err)
-      res.status(400).end("err");
-    res.status(200).end("user.toString()")
+    if (err) {
+      throw new Error(err)
+    }
+    else {
+      res.status(200).end(JSON.stringify(user));
+    }
   })
-  // res.end("Ok Done create");
 }
 
 const update = function (req, res) {
-  console.log(req.query, req.params);
-  res.end("Ok Done ud");
+  User.findOneAndUpdate({ _id: req.params.id }, req.body, { new: true })
+  .then(doc => {
+    res.status(200).end(JSON.stringify(doc))
+  })
+  .catch(err => {
+    res.status(500).send(JSON.stringify(err));
+  })
 }
 
 const destroy = function (req, res) {
-  console.log(req.query, req.params);
-  res.end("Ok Done destroy");
+  User.findOneAndDelete({ _id: req.params.id })
+  .then(doc => {
+    res.status(200).end(JSON.stringify(doc))
+  })
+  .catch(err => {
+    res.status(500).send(JSON.stringify(err));
+  })
 }
 
 module.exports = {

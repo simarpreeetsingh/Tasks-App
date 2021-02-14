@@ -1,35 +1,61 @@
 const Task = require("../models/task");
 
 const index = function (req, res) {
-  console.log(req.query, req.params);
-  res.end("Ok Done index");
+  Task.find({})
+  .then(doc => {
+    res.status(200).send(JSON.stringify({
+      success: true,
+      data: doc,
+      total: doc.length
+    }))
+  })
+  .catch(err => {
+    res.status(500).send(JSON.stringify(err))
+  })
 }
 
 const show = function (req, res) {
-  console.log(req.query, req.params, res);
-  res.end("Ok Done show");
+  Task.findOne({ _id: `${req.params.id}` })
+  .then(doc => {
+    res.status(200).send(JSON.stringify({
+      success: true,
+      data: doc
+    }))
+  })
+  .catch(err => {
+    res.status(500).send(JSON.stringify(err))
+  })
 }
 
 const create = function (req, res) {
-  console.log(req.query, req.params, req.body);
-  Task = new Task(req.body);
-  task.save(function (err) {
-    if (err)
-      console.log(err)
-      res.status(400).end("err");
-    res.status(200).end("user.toString()")
+  task = new Task(req.body)
+  task.save()
+  .then(doc => {
+    res.status(200).end(JSON.stringify(doc))
   })
-  // res.end("Ok Done create");
+  .catch(err => {
+    res.status(400).end(JSON.stringify(err))
+  })
 }
 
 const update = function (req, res) {
-  console.log(req.query, req.params);
-  res.end("Ok Done ud");
+  Task.findOneAndUpdate({ _id: req.params.id }, req.body, { new: true })
+  .then(doc => {
+    res.status(200).end(JSON.stringify(doc))
+  })
+  .catch(err => {
+    res.status(500).send(JSON.stringify(err));
+  })
 }
 
 const destroy = function (req, res) {
-  console.log(req.query, req.params);
-  res.end("Ok Done destroy");
+  Task.findOneAndDelete({ _id: req.params.id })
+  .then(doc => {
+    res.status(200).end(JSON.stringify(doc))
+  })
+  .catch(err => {
+    res.status(500).send(JSON.stringify(err));
+  })
 }
 
 module.exports = {
