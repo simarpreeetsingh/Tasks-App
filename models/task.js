@@ -12,9 +12,13 @@ const schema = new mongoose.Schema({
     type: Boolean,
     default: false
   },
+  make_public: {
+    type: Boolean,
+    default: false
+  },
   user_id: {
-    type: String
-    // min_length: 10
+    type: String,
+    required: true
   }
 });
 const Task = mongoose.model("Task", schema);

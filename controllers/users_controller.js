@@ -15,7 +15,7 @@ const index = function (req, res) {
 }
 
 const show = function (req, res) {
-  User.findOne({ _id: `${req.params.id}` })
+  User.findOne({ _id: req.params.id })
   .then(doc => {
     res.status(200).send(JSON.stringify({
       success: true,
@@ -31,10 +31,10 @@ const create = function (req, res) {
   user = new User(req.body);
   user.save(function (err) {
     if (err) {
-      throw new Error(err)
+      res.status(400).end(JSON.stringify(err));
     }
     else {
-      res.status(200).end(JSON.stringify(user));
+      res.status(201).end(JSON.stringify(user));
     }
   })
 }
@@ -59,10 +59,41 @@ const destroy = function (req, res) {
   })
 }
 
+const login = async function (req, res) {
+  user = await User.findOne({ name: req.body.name, password: req.body.password });
+  if (user) {
+    globalThis.userLoggedIn = user._id
+    res.status(200).end(JSON.stringify(user))
+  }
+  else
+    res.status(400).end(JSON.stringify({
+      success: false,
+      message: "User authentication failed!"
+    }))
+}
+
+const logout = async function (req, res) {
+  user = await User.findOne({ _id: globalThis.userLoggedIn });
+  if (user) {
+    globalThis.userLoggedIn = null
+    res.status(200).end(JSON.stringify({
+      success: true,
+      message: "Successfully logged out!"
+    }))
+  }
+  else
+    res.status(500).end(JSON.stringify({
+      success: false,
+      message: "Internal server error."
+    }))
+}
+
 module.exports = {
   index,
   show,
   create,
   update,
-  destroy
+  destroy,
+  login,
+  logout
 }
