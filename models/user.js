@@ -1,5 +1,6 @@
 const mongoose = require("mongoose");
 const validator = require("validator");
+const Task = require(__dirname + "/task")
 
 const schema = new mongoose.Schema({
   name: {
@@ -37,7 +38,18 @@ const schema = new mongoose.Schema({
   friends: {
     type: Array
   }
-});
+}, { timestamps: true });
+
+schema.virtual("tasks", {
+  ref: "Task",
+  localField: "_id",
+  foreignField: "user"
+})
+
+schema.pre("remove", async function (next) {
+  await Task.deleteMany({ user: this._id });
+  next();
+})
 
 const User = mongoose.model("User", schema);
 

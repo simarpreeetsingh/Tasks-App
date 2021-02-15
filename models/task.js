@@ -16,11 +16,11 @@ const schema = new mongoose.Schema({
     type: Boolean,
     default: false
   },
-  user_id: {
-    type: String,
-    required: true
+  user: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'User'
   }
-});
+}, { timestamps: true });
 const Task = mongoose.model("Task", schema);
 
 module.exports = Task;

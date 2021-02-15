@@ -1,0 +1,1 @@
+If using NodeJS version <=10, change `globalThis` to `global`
